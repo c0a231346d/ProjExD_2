@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 
 WIDTH, HEIGHT = 1600,900
@@ -9,7 +10,11 @@ derta = {pg.K_UP:(0,-5),
          pg.K_DOWN:(0,+5),
          pg.K_LEFT:(-5,0),
          pg.K_RIGHT:(+5,0)}
+arcs = [a for a in range(1,11)]
+
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 
 def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
     """
@@ -24,7 +29,24 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
         tate = False
     return yoko,tate
 
+def game_over(screen): #ゲームオーバー時の画面
+    fonto = pg.font.Font(None,80)
+    txt = fonto.render("Game Over",True,(255,255,255))
+    rct = pg.Surface((WIDTH,HEIGHT))
+    pg.draw.rect(rct,(0,0,0),(0,0,1600,900))
+    rct.set_alpha(150)
+    kk_img2 = pg.transform.rotozoom(pg.image.load("fig/8.png")),
+    kk_img3 = pg.transform.rotozoom(pg.image.load("fig/8.png")),
+    screen.blit(rct,[0,0])
+    screen.blit(txt,[640,410])
+    screen.blit(kk_img2,[1000,350])
+    screen.blit(kk_img3,[500,350])
+    pg.display.update()
+    time.sleep(5)
+
+
 def main():
+
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     # ここからこうかとんの設定
@@ -33,14 +55,20 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     #ここから爆弾の設定
-    bd_image = pg.Surface((20,20))
-    bd_image.set_colorkey((0,0,0))
-    pg.draw.circle(bd_image,(255,0,0),(10,10),10)
+    #bd_image = pg.Surface((20,20))
+    #bd_image.set_colorkey((0,0,0))
+    #pg.draw.circle(bd_image,(255,0,0),(10,10),10)
+    for r in range(1,11):
+        bd_image = pg.Surface((20*r,20*r))
+        bd_image.set_colorkey((0,0,0))
+        pg.draw.circle(bd_image,(255,0,0),(10*r,10*r),10*r)
     bd_rct = bd_image.get_rect()
     bd_rct.center = random.randint(0,WIDTH),random.randint(0,HEIGHT)
     vx,vy = +5,+5 #横方向速度、縦方向速度
     clock = pg.time.Clock()
     tmr = 0
+
+
     
     
     while True:
@@ -49,7 +77,7 @@ def main():
                 return
             
         if kk_rct.colliderect(bd_rct): #こうかとんと爆弾の衝突
-            print("Game Over")
+            game_over(screen)
             return
         
         screen.blit(bg_img, [0, 0]) 
