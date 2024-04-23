@@ -1,7 +1,7 @@
 import os
-import sys
 import pygame as pg
 import random
+import sys
 import time
 
 
@@ -28,6 +28,7 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
     if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
     return yoko,tate
+
 
 def game_over(screen): #ゲームオーバー時の画面
     fonto = pg.font.Font(None,80)
