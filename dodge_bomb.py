@@ -30,6 +30,7 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
     return yoko,tate
 
 
+
 def game_over(screen): #ゲームオーバー時の画面
     fonto = pg.font.Font(None,80)
     txt = fonto.render("Game Over",True,(255,255,255))
